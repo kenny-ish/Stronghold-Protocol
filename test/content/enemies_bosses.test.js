@@ -2959,6 +2959,22 @@ test('盐风主教昆图斯: 2 highest-DEF targets + neural; 崩坍 / 大潮 / �
   assert.equal(h.hooksOf('lpLoss')[0].amount, 100);
   assert.equal(h.result().lpLoss ?? h.b.result().lpLoss ?? 100, 100);
 });
+test('盐风主教昆图斯: 大潮 replaces a simultaneous normal attack', () => {
+  const h = bossArena({ units: [{ chessId: 't_wall', row: 10, col: 9 }] });
+  h.step();
+  const e = put(h, 'enemy_1521_dslily', [3, 10], { tag: 'boss' });
+  h.b.sharedBoss.hp = h.b.sharedBoss.maxHp * 0.3;
+  h.runUntil(() => e.findBuff('boss:grow')?.mods.atkPct === tb('enemy_1521_dslily', 'atkup2.atk'));
+  const tide = e.mem.ab.list.find((a) => a.stage === 2 && a.sk.slot === 6);
+  const attacks = e.stats.attacks;
+  tide.left = h.TICK;
+  e.atkCd = 0;
+  h.step();
+  h.run(1);
+  assert.equal(tide.casts, 1);
+  assert.equal(e.stats.attacks, attacks);
+});
+
 const ROCK = 1.3;
 
 test('卢西恩: evades 40 % while unblocked, ignores 40 % DEF, neural on hit; blinks past its blocker leaving a 不祥幻影', () => {

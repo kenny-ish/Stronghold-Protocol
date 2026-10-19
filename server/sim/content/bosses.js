@@ -908,13 +908,26 @@ function kitQuintus(ab, e, b, tpl) {
     const s = ab.sk[name];
     if (!s) return null;
     const kind = name.replace(/G\d$/, '');
-    const a = { cd: s.cd, icd: s.icd, sk: s, stage, cond: () => P.stage === stage, fire: (b2, e2) => QUINTUS[kind](b2, e2, s, P, tpl) };
+    const a = { name, cd: s.cd, icd: s.icd, sk: s, stage, cond: () => P.stage === stage, fire: (b2, e2) => {
+      if (name === 'TidewaterG2') {
+        e2.swing = false;
+        e2.swingTargets = null;
+        e2.atkCd = e2.s.interval;
+      }
+      QUINTUS[kind](b2, e2, s, P, tpl);
+    } };
     skills.push(a);
     return a;
   };
   const list = [{
     spawn(b2, e2) { P.t0 = b2.time; P.stageAt = b2.time; e2.profile.maxTargets = 2; },
     before(c, b2, e2) { // 同时攻击防御最高的两个单位
+      const tide = skills.find((a) => a.name === 'TidewaterG2');
+      if (P.stage === 2 && tide && tide.left <= b2.dt + 1e-9) {
+        e2.atkCd = e2.s.interval;
+        c.targets = [];
+        return;
+      }
       const l = targetsNear(b2, e2, e2.base.rangeRadius || 99).sort((p, q) => q.s.def - p.s.def || aggroCmp(p, q));
       if (l.length) c.targets = l.slice(0, 2);
     },

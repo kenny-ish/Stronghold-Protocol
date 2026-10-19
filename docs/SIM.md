@@ -310,7 +310,7 @@ HP_RATIO_NOT_FULL_ASC; PRTS 选择器 adds only the blocked units the selector's
 returns its heal targets before the blocked targets, and the heal skills' DEFAULT trigger looks at injured allies
 (test/sim/feedback1e-healers.test.js).
 
-**Enemy attacks:** blocked melee enemies hit their blocker; enemies with `rangeRadius > 0` **and `applyWay` ≠ `MELEE`**
+**Enemy attacks:** blocked melee enemies hit their blocker; for 盐风主教昆图斯 in phase 3, Great Tide replaces a normal attack when their timers expire together; enemies with `rangeRadius > 0` **and `applyWay` ≠ `MELEE`**
 attack allies whose collider touches their range circle — centre distance ≤ `rangeRadius` + `ALLY_COLLIDER_RADIUS` 0.25
 (PRTS 作战机制 §碰撞体积与位置识别: "我方干员碰撞体积基本均为以0.25格为半径的圆形", 索敌 uses the colliders; user playtest #6
 follow-up: 萨卡兹枯朽战车's 2.2 reaches 2.45; enemy skills / zones of content keep their own point radius [ASSUMED]) (a
